@@ -5,20 +5,17 @@ while True:
         case "add":
             todo = input("Enter todo: ") + "\n"
 
-            file = open('files/todos.txt','r')
-            todos = file.readlines()
-            file.close()
-
+            with open('files/todos.txt','r') as file:
+                todos = file.readlines()
+            
             todos.append(todo.title())
 
-            file = open('files/todos.txt','w')
-            file.writelines(todos)
-            file.close()
+            with open('files/todos.txt','w') as file:
+                file.writelines(todos)
 
         case "show":
-            file = open('files/todos.txt','r')
-            todos = file.readlines()
-            file.close()
+            with ('files/todos.txt','r') as file:
+                todos = file.readlines()
 
             cleaned_todos = [item.strip("\n") for item in todos]
 
@@ -27,9 +24,9 @@ while True:
                 print(string)
 
         case "edit":
-            file = open('files/todos.txt','r')
-            todos = file.readlines()
-            file.close()
+            with open('files/todos.txt','r'):
+                todos = file.readlines()
+            
             number = input("Number todo to edit: ")
             if(number > len(todos)):
                 print("There is no such todo in the list")
@@ -43,7 +40,19 @@ while True:
             todos[index] = input("Enter new value: ")
         case "complete":
             number = input("Number todo to complete: ")
+
+            with open('files/todos.txt','r') as file:
+                todos = file.readlines()
+            
+            todo_to_remove = todos[number -1]
+
             todos.pop(number -1)
+
+            with open('files/todos.txt','w') as file:
+                todos = file.writelines(todos)
+
+            message = f"Todo {todo_to_remove} was removed from todo list."
+
         case "exit":
             break
         case _:

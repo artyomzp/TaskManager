@@ -1,21 +1,28 @@
+def get_todos(filepath = "files/todos.txt"):
+    with open(filepath,'r') as file:
+        todos = file.readlines()
+    return todos
+
+def write_todos(todos, filepath = "files/todos.txt"):
+    with open(filepath,'w') as file:
+            file.writelines(todos)
+
 while True:
     user_action = input("Type add, show, edit or exit: ").strip()
-    print('add' in user_action)
+    user_action.strip()
     
-    if "add" in user_action or "new" in user_action:
+    if user_action.startswith("add") or user_action.startswith("new"):
         todo = user_action[4:]
 
-        with open('files/todos.txt','r') as file:
-            todos = file.readlines()
+        todos = get_todos()
         
         todos.append(todo.title())
 
-        with open('files/todos.txt','w') as file:
-            file.writelines(todos)
+        write_todos(todos)
 
-    elif "show" in user_action:
-        with open('files/todos.txt','r') as file:
-            todos = file.readlines()
+    elif user_action.startswith("show") :
+        
+        todos = get_todos()
 
         cleaned_todos = [item.strip("\n") for item in todos]
 
@@ -23,39 +30,46 @@ while True:
             string = f"{index + 1}-{item}"
             print(string)
 
-    elif "edit" in user_action:
-        number = user_action[5:]       
-        with open('files/todos.txt','r'):
-            todos = file.readlines()
-        
-        if(number > len(todos)):
-            print("There is no such todo in the list")
-            break
-        
-        index = int(number) - 1;
-        
-        if(index < 0):
-            print("list is empty")
-            break
-        todos[index] = input("Enter new value: ")
+    elif user_action.startswith("edit"):
+        try:
+            number = user_action[5:]       
+            
+            todos = get_todos()
+            
+            if(number > len(todos)):
+                print("There is no such todo in the list")
+                break
+            
+            index = int(number) - 1;
+            
+            if(index < 0):
+                print("list is empty")
+                break
+            todos[index] = input("Enter new value: ")
+            write_todos(todos)
+        except ValueError:
+            print("Your command is not valid")
+            continue
 
-    elif "complete" in user_action:
-        number = int(user_action[9:])
+    elif user_action.startswith("complete"):
+        try:
+            number = int(user_action[9:])
 
-        with open('files/todos.txt','r') as file:
-            todos = file.readlines()
-        
-        todo_to_remove = todos[number -1]
+            todos = get_todos()
+            
+            todo_to_remove = todos[number -1]
 
-        todos.pop(number -1)
+            todos.pop(number -1)
 
-        with open('files/todos.txt','w') as file:
-            todos = file.writelines(todos)
+            write_todos(todos)
 
-        message = f"Todo {todo_to_remove} was removed from todo list."
-        print(message)
+            message = f"Todo {todo_to_remove} was removed from todo list."
+            print(message)
+        except IndexError:
+            print("There is no task with such number")
+            continue
 
-    elif "exit" in user_action:
+    elif user_action.startswith("exit"):
         break
     else:
         print("Command is not valid")

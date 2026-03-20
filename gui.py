@@ -23,17 +23,23 @@ while True:
             functions.write_todos(todos)
             window["todos"].update(value=todos)
         case "Edit":
-            todo_to_edit = values["todos"][0]
-            new_value = values["todo"]
-            functions.write_todos(todos)
-            window["todos"].update(value=todos)
+            try:
+                todo_to_edit = values["todos"][0]
+                new_value = values["todo"]
+                functions.write_todos(todos)
+                window["todos"].update(value=todos)
+            except IndexError:
+                sg.popup("Please select an item first", font=("Helvetica", 20))
         case "Complete":
-            todo_to_complete = values["todos"][0]
-            todos = functions.get_todos()
-            todos.remove(todo_to_complete)
-            functions.write_todos(todos)
-            window["todos"].update(value=todos)
-            window["todo"].update(value="")
+            try:
+                todo_to_complete = values["todos"][0]
+                todos = functions.get_todos()
+                todos.remove(todo_to_complete)
+                functions.write_todos(todos)
+                window["todos"].update(value=todos)
+                window["todo"].update(value="")
+            except IndexError:
+                sg.popup("Please select an item first", font=("Helvetica", 20))vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         case "todos":
             window["todo"].update(value=values["todos"][0])
         case sg.WIN_CLOSED | "Exit":

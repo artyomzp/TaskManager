@@ -1,5 +1,10 @@
 import functions
 import FreeSimpleGUI as sg
+import os
+
+if not os.path.exists("todos.txt"):
+    with open("todos.txt", "w"):
+        pass
 
 label = sg.Text("Type in a to-do")
 input_box = sg.InputText(tooltip="Enter to do", key="todo")
